@@ -1,10 +1,29 @@
-import { Text, View, StyleSheet } from 'react-native';
- import { Link } from 'expo-router'; 
+import React from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import Card from '@/components/card';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function Index() {
+  const genres = [
+    'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B', 
+    'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae', 
+    'Klassiek', 'Latin', 'Gospel', 'Folk', 'World Music', 'Opera'
+  ];
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
+      <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
+
+      {/* ScrollView voor horizontaal scrollen */}
+      <ScrollView
+        contentContainerStyle={styles.grid} // Dit zorgt ervoor dat de items in de ScrollView goed worden uitgelijnd
+        horizontal={true} // Zet horizontale scrollen aan
+        showsHorizontalScrollIndicator={false} // Verbergt de horizontale scrollbar
+      >
+        {genres.map((genre, index) => (
+          <Card key={index} text={genre} />
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -13,15 +32,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#25292e',
-    alignItems: 'center',
+    padding: 16,
     justifyContent: 'center',
+    alignItems: 'center',
   },
-  text: {
-    color: '#fff',
+  title: {
+    marginBottom: 16,
+    textAlign: 'center',
+    color: '#FFF', // Zorg ervoor dat de titel wit is
   },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#fff',
+  grid: {
+    flexDirection: 'row', // Zorgt voor horizontale uitlijning van de kaarten
+    paddingLeft: 8, // Voeg ruimte toe aan de linkerzijde
+    paddingRight: 8, // Voeg ruimte toe aan de rechterzijde
   },
 });
