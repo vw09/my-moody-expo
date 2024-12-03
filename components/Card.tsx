@@ -21,12 +21,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#3c3f41',  // Kleur van de rechthoek
     padding: 16,  // Padding binnen de kaart
     borderRadius: 12,  // Afronden van hoeken
+    alignItems: 'center',  // Zorgt ervoor dat de tekst in het midden van de kaart staat
     margin: 8,  // Ruimte tussen kaarten
-    alignItems: 'center',  // Centraal uitlijnen van de tekst
-    justifyContent: 'center',  // Zorgt ervoor dat de tekst gecentreerd is
-    minWidth: 100,  // Minimale breedte van de kaart (past goed voor horizontaal scrollen)
-    maxWidth: 150,  // Maximale breedte van de kaart
     height: 50,  // Verhoog de hoogte naar 50 (aanpassen op basis van je ontwerp)
+    justifyContent: 'center',  // Zorgt ervoor dat de tekst gecentreerd is
   },
   cardText: {
     color: '#FFF',  // Kleur van de tekst
