@@ -1,9 +1,13 @@
 import { Text, View, StyleSheet } from 'react-native';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function LibraryScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>library screen</Text>
+      <ThemedText type='title'> Library </ThemedText>
+      <ThemedText type='default'> Recent </ThemedText>
+      <ThemedText type='default'> Liked </ThemedText>
+      <ThemedText type='default'> Recommended </ThemedText>
     </View>
   );
 }

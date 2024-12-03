@@ -1,9 +1,14 @@
 import { Text, View, StyleSheet } from 'react-native';
+import { ThemedText } from '@/components/ThemedText';
 
 export default function DiaryScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>diary screen</Text>
+      <ThemedText type='title'> Diary </ThemedText>
+      <ThemedText type='default'> Moodchart this week </ThemedText>
+      <ThemedText type='default'> Mood counter </ThemedText>
+      <ThemedText type='default'> Quote </ThemedText>
+      <ThemedText type='default'> Moodchart this month </ThemedText>
     </View>
   );
 }
