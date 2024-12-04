@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Card from '@/components/card';
+import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
 
 export default function Index() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
-import Card from '@/components/card'; // Zorg ervoor dat je Card component geïmporteerd is
+import Card from '@/components/Card'; // Zorg ervoor dat je Card component geïmporteerd is
 
 export default function DiaryScreen() {
   // Lijst van de items voor de DiaryScreen
