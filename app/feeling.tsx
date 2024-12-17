@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
 
-const Neutral = require('../assets/images/neutral.png');
+const Good = require('../assets/images/good.png');
 const Happy = require('../assets/images/happy.png');
 const Sad = require('../assets/images/sad.png');
 const Angry = require('../assets/images/angry.png');
-const Excited = require('../assets/images/excited.png');
+const Spectaculair = require('../assets/images/spectaculair.png');
+const Upset = require('../assets/images/upset.png');
 
 
 export default function FeelingPage() {
@@ -20,9 +21,10 @@ export default function FeelingPage() {
         <View style={styles.emojiContainer}>
           <Image source={Happy} style={styles.emoji} />
           <Image source={Sad} style={styles.emoji} />
-          <Image source={Excited} style={styles.emoji} />
-          <Image source={Neutral} style={styles.emoji} />
+          <Image source={Spectaculair} style={styles.emoji} />
+          <Image source={Good} style={styles.emoji} />
           <Image source={Angry} style={styles.emoji} />
+          <Image source={Upset} style={styles.emoji} />
         </View>
 
         {/* Continue Knop */}
