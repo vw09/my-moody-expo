@@ -17,7 +17,7 @@ export default function LoginScreen() {
       const checkLogin = async () => {
           const userId = await AsyncStorage.getItem('userId');
           if (userId) {
-              router.replace('/(tabs)');
+              router.replace('/feeling');
           }
       };
   
@@ -54,12 +54,6 @@ export default function LoginScreen() {
       }
     }
     
-    
-
-    const handleSubmitLogin = () => {
-      console.log('Login Submitted');
-      router.replace('/feeling'); // Navigeer naar de feeling page
-    };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -76,9 +70,8 @@ export default function LoginScreen() {
 
      
           {/* Submit knop */}
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmitLogin}>
             <ThemedText type="defaultSemiBold" style={styles.submitText}>LOGIN</ThemedText>
-          </TouchableOpacity>
+         
 
           {/* Klein blauw linktekstje */}
           <TouchableOpacity>
