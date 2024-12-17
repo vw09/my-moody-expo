@@ -1,12 +1,27 @@
 import React from 'react';
-import { View, Alert, StyleSheet, ScrollView, } from 'react-native';
+import { View, SafeAreaView, Alert, StyleSheet, ScrollView, } from 'react-native';
 import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
+import usePlaylists from '@/data/Playlists';
 
 
 
 
-export default function Index() {
+export default function Homescreen() {
+
+  const { data, isLoading, isError } = usePlaylists();
+
+  console.log(data);
+
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ThemedText type="title">Loading...</ThemedText>
+      </View>
+    );
+  }
+  
   const genres = [
     'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B', 
     'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae', 
@@ -14,25 +29,26 @@ export default function Index() {
   ];
 
   
-
-  
   return (
-    <View style={styles.container}>
-      <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
+<SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
 
-      {/* ScrollView voor horizontaal scrollen */}
-      <ScrollView
-        contentContainerStyle={styles.grid} // Dit zorgt ervoor dat de items in de ScrollView goed worden uitgelijnd
-        horizontal={true} // Zet horizontale scrollen aan
-        showsHorizontalScrollIndicator={false} // Verbergt de horizontale scrollbar
-      >
-        {genres.map((genre, index) => (
-          <Card key={index} text={genre} />
-        ))}
-      </ScrollView>
-    </View>
+        {/* ScrollView voor horizontaal scrollen */}
+        <ScrollView
+          contentContainerStyle={styles.grid} // Dit zorgt ervoor dat de items in de ScrollView goed worden uitgelijnd
+          horizontal={true} // Zet horizontale scrollen aan
+          showsHorizontalScrollIndicator={false} // Verbergt de horizontale scrollbar
+        >
+          {genres.map((genre, index) => (
+            <Card key={index} text={genre} />
+          ))}
+        </ScrollView>
+      </View> 
+    </SafeAreaView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -41,6 +57,9 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  safeArea: {
+    flex: 1,
   },
   title: {
     marginBottom: 16,
