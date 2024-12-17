@@ -2,26 +2,10 @@ import React from 'react';
 import { View, SafeAreaView, Alert, StyleSheet, ScrollView, } from 'react-native';
 import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
-import usePlaylists from '@/data/Playlists';
-
-
 
 
 export default function Homescreen() {
 
-  const { data, isLoading, isError } = usePlaylists();
-
-  console.log(data);
-
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ThemedText type="title">Loading...</ThemedText>
-      </View>
-    );
-  }
-  
   const genres = [
     'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B', 
     'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae', 
