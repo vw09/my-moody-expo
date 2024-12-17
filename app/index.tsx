@@ -13,7 +13,7 @@ const BACKGROUND_IMAGE = require('../assets/images/background.png');
 export default function LoginScreen() {
     const router = useRouter();
 
-    useEffect(() => {
+    /*useEffect(() => {
       const checkLogin = async () => {
           const userId = await AsyncStorage.getItem('userId');
           if (userId) {
@@ -22,7 +22,22 @@ export default function LoginScreen() {
       };
   
       checkLogin();
-  }, []);
+  }, []);*/
+
+  const handleLogin = async () => {
+    try {
+      // Simuleer een inlogactie: je kunt hier echte authenticatie toevoegen
+      const mockUserId = '12345'; // Dummy user ID
+      await AsyncStorage.setItem('userId', mockUserId);
+
+      // Navigeer naar de Feeling Page
+      router.replace('/feeling');
+    } catch (error) {
+      console.error('Login Error:', error);
+      Alert.alert('Login Failed', 'An error occurred during login');
+    }
+  };
+
 
     const handleGoogleLogin = async () => {
       try {
@@ -69,9 +84,10 @@ export default function LoginScreen() {
         <TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#000" />
 
      
-          {/* Submit knop */}
-            <ThemedText type="defaultSemiBold" style={styles.submitText}>LOGIN</ThemedText>
-         
+           {/* Submit knop */}
+           <TouchableOpacity style={styles.submitButton} onPress={handleLogin}>
+            <Text style={styles.submitText}>LOGIN</Text>
+          </TouchableOpacity>
 
           {/* Klein blauw linktekstje */}
           <TouchableOpacity>
@@ -142,18 +158,26 @@ input: {
   fontWeight: '600',
 },
 submitButton: {
-  backgroundColor: '#FFF',
-  borderRadius: 25,
-  height: 50,
-  width: '100%',
+  backgroundColor: '#A3BB91', 
+  borderRadius: 15,           
+  borderWidth: 1,             
+  borderColor: '#fff',     
+  height: 45,                 
+  width: '60%',               
   justifyContent: 'center',
   alignItems: 'center',
   marginBottom: 20,
+  elevation: 3,               
+  shadowColor: '#000',        
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
 },
 submitText: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#2D2C2C',
+  color: '#FFF',
+  fontSize: 16,               
+  fontWeight: '600',          
+  textTransform: 'uppercase', 
 },
 smallBlueText: {
   fontSize: 14,
