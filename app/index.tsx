@@ -57,7 +57,7 @@ export default function LoginScreen() {
                   await AsyncStorage.setItem('userId', user);
     
                   // Navigate to tabs after successful login
-                  router.replace('/(tabs)');
+                  router.replace('/feeling');
               }
           } else {
               Alert.alert('Authentication canceled or failed');

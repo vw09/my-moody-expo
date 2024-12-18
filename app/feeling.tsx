@@ -1,16 +1,24 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { useRouter } from 'expo-router';
 
-
-const Good = require('../assets/images/good.png');
+// Importeer afbeeldingen
+const Good = require('@/assets/images/good.png');
 const Happy = require('../assets/images/happy.png');
 const Sad = require('../assets/images/sad.png');
 const Angry = require('../assets/images/angry.png');
-const Spectaculair = require('../assets/images/spectaculair.png');
+const Spectacular = require('../assets/images/spectaculair.png');
 const Upset = require('../assets/images/upset.png');
 
-
 export default function FeelingPage() {
+  const router = useRouter(); // Router om te navigeren
+
+  // Functie om naar de tabs homepagina te gaan
+  const handleContinue = () => {
+    router.replace('/(tabs)'); // Vervang de huidige pagina door de tabs homepagina
+  };
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -21,14 +29,14 @@ export default function FeelingPage() {
         <View style={styles.emojiContainer}>
           <Image source={Happy} style={styles.emoji} />
           <Image source={Sad} style={styles.emoji} />
-          <Image source={Spectaculair} style={styles.emoji} />
-          <Image source={Good} style={styles.emoji} />
+          <Image source={Spectacular} style={styles.emoji} />
+          <Image width={80} height={80} source={Good} style={styles.emoji} />
           <Image source={Angry} style={styles.emoji} />
           <Image source={Upset} style={styles.emoji} />
         </View>
 
         {/* Continue Knop */}
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
           <Text style={styles.continueText}>continue</Text>
         </TouchableOpacity>
       </View>
@@ -46,18 +54,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 40,
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 28,
-    color: '#FFF',
+    color: '#EAEAEA', // Zachter wit
     fontWeight: 'bold',
+    marginBottom: 20,
   },
   emojiContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    gap: 20, // Ruimte tussen emoji's
+    width: '100%',
+    paddingHorizontal: 20, // Ruimte aan de zijkanten
   },
   emoji: {
     width: 80,
@@ -65,14 +76,20 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   continueButton: {
-    backgroundColor: '#000',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    borderRadius: 25,
+    backgroundColor: '#3C3C3C',
+    paddingVertical: 8,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    elevation: 3, // Schaduw op Android
+    shadowColor: '#000', // Schaduw op iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
   continueText: {
     color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
 });

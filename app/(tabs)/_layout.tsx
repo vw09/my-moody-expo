@@ -17,7 +17,7 @@ export default function TabLayout() {
     backgroundColor: '#25292e',
     },
   }}
->
+> 
 
       <Tabs.Screen
         name="index"
