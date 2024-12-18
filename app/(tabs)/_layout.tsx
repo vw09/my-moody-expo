@@ -5,23 +5,27 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function TabLayout() {
   return (
-    <Tabs
+<Tabs
   screenOptions={{
     tabBarActiveTintColor: '#A3BB91',
     tabBarStyle: {
       backgroundColor: '#25292e',
-      position: 'absolute', // Laat de tabBar zweven
+      position: 'absolute',
       bottom: 28,           // Afstand vanaf de onderkant
-      marginHorizontal: 20, // Gelijke ruimte links en rechts
+      marginHorizontal: 20, // Ruimte aan beide kanten
       borderRadius: 30,     // Afgeronde hoeken
       height: 50,           // Hoogte van de navigatiebalk
+      paddingTop: 5,       // Ruimte boven de iconen
+      paddingBottom: 10,    // Ruimte onder de iconen
+      justifyContent: 'center', // Verticaal centreren
+      alignItems: 'center',     // Horizontaal centreren
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.3,
       shadowRadius: 4,
       elevation: 5,         // Schaduw op Android
     },
-    tabBarShowLabel: false, // Verberg de tab labels als alleen iconen gewenst zijn
+    tabBarShowLabel: false, // Verberg de tab labels
   }}
 >
 
