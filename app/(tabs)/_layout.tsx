@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
-
 import Ionicons from '@expo/vector-icons/Ionicons';
+
 
 
 export default function TabLayout() {
@@ -8,26 +8,32 @@ export default function TabLayout() {
     <Tabs
   screenOptions={{
     tabBarActiveTintColor: '#A3BB91',
-    headerStyle: {
-      backgroundColor: '#25292e',
-    },
-    headerShadowVisible: false,
-    headerTintColor: '#fff',
     tabBarStyle: {
-    backgroundColor: '#25292e',
+      backgroundColor: '#25292e',
+      position: 'absolute', // Laat de tabBar zweven
+      bottom: 28,           // Afstand vanaf de onderkant
+      marginHorizontal: 20, // Gelijke ruimte links en rechts
+      borderRadius: 30,     // Afgeronde hoeken
+      height: 50,           // Hoogte van de navigatiebalk
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4,
+      elevation: 5,         // Schaduw op Android
     },
+    tabBarShowLabel: false, // Verberg de tab labels als alleen iconen gewenst zijn
   }}
-> 
+>
 
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
-          ),
-        }}
-      />
+<Tabs.Screen
+  name="index"
+  options={{
+    headerShown: false, // Verberg de standaard header
+    tabBarIcon: ({ color, focused }) => (
+      <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+    ),
+  }}
+/>
       <Tabs.Screen
         name="library"
         options={{
