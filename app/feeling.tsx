@@ -1,44 +1,47 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ImageBackground, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import { API_URL } from '@/constants/Api';
 
 // Achtergrondafbeelding
 const BACKGROUND_IMAGE = require('../assets/images/background2.png');
 
-// Emoji afbeeldingen
-const Good = require('../assets/images/good.png');
-const Happy = require('../assets/images/happy.png');
-const Sad = require('../assets/images/sad.png');
-const Angry = require('../assets/images/angry.png');
-const Spectacular = require('../assets/images/spectaculair.png');
-const Upset = require('../assets/images/upset.png');
+const emojiData = [
+  { name: 'Happy', image: require('../assets/images/happy.png') },
+  { name: 'Sad', image: require('../assets/images/sad.png') },
+  { name: 'Angry', image: require('../assets/images/angry.png') },
+  { name: 'Spectaculair', image: require('../assets/images/spectaculair.png') },
+  { name: 'Good', image: require('../assets/images/good.png') },
+  { name: 'Upset', image: require('../assets/images/upset.png') }
+];
 
 // Functie voor het opslaan van de stemming
 const saveMood = async (mood: string) => {
   try {
-    const response = await fetch('http://<SERVER_URL>/moods', {
+    const response = await fetch(`${API_URL}/moods`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user: '12345', // Hier komt de ingelogde gebruiker-ID
-        mood: mood,
-        description: `Feeling ${mood}`, // Optionele beschrijving
+        user: '637f72c58c5aab5f8f68f0c9',  // Dit moet de juiste ObjectId van de ingelogde gebruiker zijn
+        mood: mood.toLowerCase(),  // Zorg ervoor dat de mood in kleine letters is
+        description: `Feeling ${mood}`,
       }),
     });
 
     if (!response.ok) {
+      const errorResponse = await response.json();
+      console.error('Error Response:', errorResponse);
       throw new Error('Failed to save mood');
     }
 
-    console.log('Mood saved successfully');
+    const data = await response.json();
+    console.log('Mood saved:', data);
+    return data;
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('Error saving mood:', error.message);
-    } else {
-      console.error('Error saving mood:', error);
-    }
+    console.error('Save Mood Error:', error);
+    return null;
   }
 };
 
@@ -46,53 +49,28 @@ export default function FeelingPage() {
   const router = useRouter();
 
   const handleMoodSelection = async (mood: string) => {
-    await saveMood(mood); // Opslaan van stemming in de database
-    router.replace('/(tabs)'); // Navigeren naar tabs
+    console.log(`Selected mood: ${mood}`);  // Log de geselecteerde mood
+    const savedMood = await saveMood(mood); // Opslaan van stemming in de database
+  
+    if (savedMood) {
+      router.replace('/(tabs)'); // Navigeren naar tabs als de mood succesvol is opgeslagen
+    }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Achtergrondafbeelding als parent-container */}
       <ImageBackground source={BACKGROUND_IMAGE} style={styles.background}>
-        <View style={styles.container}>
-          {/* Titel */}
-          <Text style={styles.title}>How do you feel today?</Text>
-
-          {/* Emoji's */}
-          <View style={styles.emojiContainer}>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => handleMoodSelection('happy')}>
-                <Image source={Happy} style={styles.emoji} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => handleMoodSelection('sad')}>
-                <Image source={Sad} style={styles.emoji} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleMoodSelection('spectacular')}>
-                <Image source={Spectacular} style={styles.emoji} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => handleMoodSelection('good')}>
-                <Image source={Good} style={styles.emoji} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleMoodSelection('angry')}>
-                <Image source={Angry} style={styles.emoji} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.row}>
-              <TouchableOpacity onPress={() => handleMoodSelection('upset')}>
-                <Image source={Upset} style={styles.emoji} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Continue Knop */}
-          <TouchableOpacity style={styles.continueButton} onPress={() => router.replace('/(tabs)')}>
-            <Text style={styles.continueText}>continue</Text>
-          </TouchableOpacity>
+        <Text style={styles.title}>How do you feel today?</Text>
+        <View style={styles.emojiContainer}>
+          {emojiData.map((emoji, index) => (
+            <TouchableOpacity key={index} style={styles.emojiWrap} onPress={() => handleMoodSelection(emoji.name)}>
+              <Image source={emoji.image} style={styles.emoji} />
+            </TouchableOpacity>
+          ))}
         </View>
+        <TouchableOpacity style={styles.continueButton} onPress={() => router.replace('/(tabs)')}>
+          <Text style={styles.continueText}>Continue</Text>
+        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -104,57 +82,43 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    position: 'absolute',
     width: '100%',
     height: '100%',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
+    resizeMode: 'cover',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 30,
-    paddingHorizontal: 20,
+    paddingVertical: 50,
   },
   title: {
-    fontSize: 36,
-    color: '#FFF',
+    fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: '#fff',
     marginBottom: 20,
   },
   emojiContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  row: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-    marginVertical: 10,
+  },
+  emojiWrap: {
+    margin: 10,
+    width: 70,
+    height: 70,
   },
   emoji: {
-    width: 100,
-    height: 100,
-    marginHorizontal: 10,
+    width: '100%',
+    height: '100%',
   },
   continueButton: {
-    backgroundColor: '#3C3C3C',
-    paddingVertical: 12,
-    paddingHorizontal: 50,
-    borderRadius: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+    backgroundColor: '#000',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
     marginTop: 20,
   },
   continueText: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '600',
-    textTransform: 'capitalize',
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
