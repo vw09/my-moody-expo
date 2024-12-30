@@ -2,12 +2,12 @@ import React from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
-import SharedBackground from '@/components/SharedBackground'; // SharedBackground importeren
+import SharedBackground from '@/components/SharedBackground';
 
 export default function Homescreen() {
   const genres = [
-    'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B', 
-    'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae', 
+    'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B',
+    'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae',
     'Klassiek', 'Latin', 'Gospel', 'Folk', 'World Music', 'Opera'
   ];
 
@@ -18,16 +18,25 @@ export default function Homescreen() {
           {/* Titel */}
           <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
 
-          {/* ScrollView voor horizontaal scrollen */}
+          {/* Genres */}
           <ScrollView
-            contentContainerStyle={styles.grid}
-            horizontal={true}
+            contentContainerStyle={styles.genreContainer}
+            horizontal
             showsHorizontalScrollIndicator={false}
           >
             {genres.map((genre, index) => (
               <Card key={index} text={genre} />
             ))}
           </ScrollView>
+
+          {/* Scrollbaar Grid */}
+          <ScrollView
+  contentContainerStyle={[styles.cardGrid, { paddingBottom: 100 }]} // Voeg ruimte toe onderaan
+>
+  {[...Array(20)].map((_, index) => (
+    <View key={index} style={styles.cardPlaceholder} />
+  ))}
+</ScrollView>
         </View>
       </SafeAreaView>
     </SharedBackground>
@@ -40,18 +49,33 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 16,
-    justifyContent: 'center',
+    paddingVertical: 16,
     alignItems: 'center',
   },
   title: {
     marginBottom: 16,
     textAlign: 'center',
-    color: '#FFF', // Zorg ervoor dat de titel wit is
+    color: '#FFF',
+    fontSize: 28,
+    fontWeight: 'bold',
   },
-  grid: {
-    flexDirection: 'row', // Zorgt voor horizontale uitlijning van de kaarten
-    paddingLeft: 8,
-    paddingRight: 8,
+  genreContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginBottom: 16,
+  },
+  cardGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingBottom: 20, // Extra ruimte onderaan
+  },
+  cardPlaceholder: {
+    width: '47%', // Twee kaarten naast elkaar
+    height: 120,  // Hoogte van de rechthoeken
+    backgroundColor: '#EDEDED',
+    borderRadius: 12,
+    marginBottom: 16,
   },
 });
