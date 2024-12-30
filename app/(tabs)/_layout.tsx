@@ -16,7 +16,7 @@ export default function TabLayout() {
       borderRadius: 30,     // Afgeronde hoeken
       height: 50,           // Hoogte van de navigatiebalk
       paddingTop: 5,       // Ruimte boven de iconen
-      paddingBottom: 10,    // Ruimte onder de iconen
+      paddingBottom: 5,    // Ruimte onder de iconen
       justifyContent: 'center', // Verticaal centreren
       alignItems: 'center',     // Horizontaal centreren
       shadowColor: '#000',
