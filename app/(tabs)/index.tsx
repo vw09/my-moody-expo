@@ -1,4 +1,3 @@
-import React, { createContext, useState, useContext } from 'react';
 import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
