@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Header from '@/components/navigation/header'; 
 import { ThemedText } from '@/components/ThemedText';
 import Card from '@/components/Card'; // Zorg ervoor dat je Card component geïmporteerd is
-
-const BACKGROUND_IMAGE = require('../assets/images/background2.png');
 
 export default function DiaryScreen() {
   // Lijst van de items voor de DiaryScreen

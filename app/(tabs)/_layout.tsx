@@ -22,7 +22,6 @@ export default function TabLayout() {
       shadowColor: '#000',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.3,
-      shadowRadius: 4,
       elevation: 5,         // Schaduw op Android
     },
     tabBarShowLabel: false, // Verberg de tab labels
@@ -41,6 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="library"
         options={{
+          headerShown: false,
           title: 'Library',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'library-sharp' : 'library-outline'} color={color} size={24}/>
@@ -51,9 +51,21 @@ export default function TabLayout() {
 <Tabs.Screen
         name="diary"
         options={{
+          headerShown: false,
           title: 'Diary',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'book-sharp' : 'book-sharp'} color={color} size={24}/>
+          ),
+        }}
+      />
+
+<Tabs.Screen
+        name="profile"
+        options={{
+          headerShown: false,
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? 'person-sharp' : 'person-outline'} color={color} size={24}/>
           ),
         }}
       />

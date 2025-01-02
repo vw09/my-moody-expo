@@ -1,7 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export default function ProfileScreen() {
+  const router = useRouter(); // Haal de router op
+
+  const handleLogout = () => {
+    // Logica om uit te loggen (bijv. auth tokens verwijderen)
+    console.log('User logged out');
+    router.push('/'); // Navigeer naar de index/inlogpagina
+  };
+
   return (
     <View style={styles.container}>
       {/* Profielafbeelding */}
@@ -34,7 +43,8 @@ export default function ProfileScreen() {
           <Text style={styles.menuText}>Journal</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        {/* Log out knop */}
+        <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
           <View style={styles.menuIcon}>
             <Text style={styles.menuIconText}>👤</Text>
           </View>
