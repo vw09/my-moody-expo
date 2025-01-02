@@ -6,6 +6,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemedText } from '@/components/ThemedText';
+import useMessages from '@/data/messages';
 
 // Achtergrondafbeelding
 const BACKGROUND_IMAGE = require('../assets/images/background.png');
@@ -13,7 +14,7 @@ const BACKGROUND_IMAGE = require('../assets/images/background.png');
 export default function LoginScreen() {
   const router = useRouter();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const checkLogin = async () => {
       const userId = await AsyncStorage.getItem('userId');
       if (userId) {
@@ -22,7 +23,7 @@ export default function LoginScreen() {
     };
 
     checkLogin();
-  }, []);
+  }, []);*/
 
   // Functie om in te loggen via Google
   const handleGoogleLogin = async () => {
@@ -68,11 +69,6 @@ export default function LoginScreen() {
           <TextInput placeholder="Username" style={styles.input} placeholderTextColor="#000" />
           <TextInput placeholder="Email" style={styles.input} placeholderTextColor="#000" />
           <TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#000" />
-
-          {/* Login knop */}
-          <TouchableOpacity style={styles.submitButton} onPress={handleGoogleLogin}>
-            <Text style={styles.submitText}>Login with Google</Text>
-          </TouchableOpacity>
 
           {/* Klein blauw linktekstje */}
           <TouchableOpacity>
