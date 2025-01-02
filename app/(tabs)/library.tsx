@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { ImageBackground, View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native';
+
+const BACKGROUND_IMAGE = require('@/assets/images/background2.png'); // Voeg je afbeelding hier in
 
 export default function LibraryScreen() {
   const categories = ['Playlists', 'Podcasts', 'Artisten', 'Albums'];
@@ -8,96 +10,75 @@ export default function LibraryScreen() {
   const recommendedItems = ['Recommended 1', 'Recommended 2', 'Recommended 3', 'Recommended 4'];
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.contentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.icon}>
-            <Text style={styles.iconText}>👤</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.icon}>
-            <Text style={styles.iconText}>🔍</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Title */}
-        <Text style={styles.title}>Library</Text>
-
-        {/* Categories */}
+    <ImageBackground
+      source={BACKGROUND_IMAGE}
+      style={styles.background}
+      resizeMode="cover" // Zorg dat de afbeelding de container bedekt
+    >
+      <View style={styles.overlay}>
         <ScrollView
-          horizontal
-          contentContainerStyle={styles.categoriesContainer}
-          showsHorizontalScrollIndicator={false}
+          style={styles.scrollView}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
         >
-          {categories.map((category, index) => (
-            <TouchableOpacity key={index} style={styles.categoryButton}>
-              <Text style={styles.categoryText}>{category}</Text>
-            </TouchableOpacity>
-          ))}
+          {/* Titel */}
+          <Text style={styles.title}>Library</Text>
+
+          {/* Categorieën */}
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.categoriesContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {categories.map((category, index) => (
+              <TouchableOpacity key={index} style={styles.categoryButton}>
+                <Text style={styles.categoryText}>{category}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Secties */}
+          <Text style={styles.sectionTitle}>Recent</Text>
+          <View style={styles.grid}>
+            {recentItems.map((item, index) => (
+              <View key={index} style={styles.card} />
+            ))}
+          </View>
+
+          <Text style={styles.sectionTitle}>Liked</Text>
+          <View style={styles.grid}>
+            {likedItems.map((item, index) => (
+              <View key={index} style={styles.card} />
+            ))}
+          </View>
+
+          <Text style={styles.sectionTitle}>Recommended</Text>
+          <View style={styles.grid}>
+            {recommendedItems.map((item, index) => (
+              <View key={index} style={styles.card} />
+            ))}
+          </View>
         </ScrollView>
-
-        {/* Sections */}
-        <Text style={styles.sectionTitle}>Recent</Text>
-        <View style={styles.grid}>
-          {recentItems.map((item, index) => (
-            <View key={index} style={styles.card} />
-          ))}
-        </View>
-
-        <Text style={styles.sectionTitle}>Liked</Text>
-        <View style={styles.grid}>
-          {likedItems.map((item, index) => (
-            <View key={index} style={styles.card} />
-          ))}
-        </View>
-
-        <Text style={styles.sectionTitle}>Recommended</Text>
-        <View style={styles.grid}>
-          {recommendedItems.map((item, index) => (
-            <View key={index} style={styles.card} />
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#25292e',
-    overflow: 'hidden', // Zorg ervoor dat inhoud buiten de container wordt verborgen
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Donkere overlay voor betere leesbaarheid
   },
   scrollView: {
     flex: 1,
-    marginBottom: -50, // Zorg ervoor dat inhoud onder de navigatie verdwijnt
   },
   contentContainer: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 100, // Zorg voor extra ruimte onderaan
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  icon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#444',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  iconText: {
-    fontSize: 18,
-    color: 'white',
+    paddingBottom: 100, // Zorg ervoor dat er ruimte is onderaan om te scrollen
   },
   title: {
     fontSize: 28,

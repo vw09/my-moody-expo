@@ -3,39 +3,44 @@ import Card from '@/components/Card';
 import { ThemedText } from '@/components/ThemedText';
 import SharedBackground from '@/components/SharedBackground';
 
-export default function Homescreen() {
+
   const genres = [
     'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B',
     'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae',
     'Klassiek', 'Latin', 'Gospel', 'Folk', 'World Music', 'Opera'
   ];
 
+  export default function Index() {
   return (
     <SharedBackground>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          {/* Titel */}
-          <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
-
-          {/* Genres */}
+          {/* Inhoud */}
           <ScrollView
-            contentContainerStyle={styles.genreContainer}
-            horizontal
-            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.contentContainer}
+            showsVerticalScrollIndicator={false}
           >
-            {genres.map((genre, index) => (
-              <Card key={index} text={genre} />
-            ))}
-          </ScrollView>
+            {/* Titel */}
+            <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
 
-          {/* Scrollbaar Grid */}
-          <ScrollView
-  contentContainerStyle={[styles.cardGrid, { paddingBottom: 100 }]} // Voeg ruimte toe onderaan
->
-  {[...Array(20)].map((_, index) => (
-    <View key={index} style={styles.cardPlaceholder} />
-  ))}
-</ScrollView>
+            {/* Genres */}
+            <ScrollView
+              contentContainerStyle={styles.genreContainer}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            >
+              {genres.map((genre, index) => (
+                <Card key={index} text={genre} />
+              ))}
+            </ScrollView>
+
+            {/* Grid met inhoud */}
+            <View style={styles.gridContainer}>
+              {[...Array(20)].map((_, index) => (
+                <View key={index} style={styles.cardPlaceholder} />
+              ))}
+            </View>
+          </ScrollView>
         </View>
       </SafeAreaView>
     </SharedBackground>
@@ -47,9 +52,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
-    paddingVertical: 16,
-    alignItems: 'center',
+    flex: 2,
+    flexDirection: 'column', // Flexibele verticale layout
+  },
+  contentContainer: {
+    flexGrow: 1, // Zorgt ervoor dat de inhoud zich volledig vult
+    paddingHorizontal: 4,
+    paddingTop: 16,
   },
   title: {
     marginBottom: 16,
@@ -60,21 +69,20 @@ const styles = StyleSheet.create({
   },
   genreContainer: {
     flexDirection: 'row',
-    marginHorizontal: 20,
-    marginBottom: 16,
+    marginBottom: 4,
+    position: 'fixed',
   },
-  cardGrid: {
+  gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingBottom: 20, // Extra ruimte onderaan
+    paddingHorizontal: 4,
   },
   cardPlaceholder: {
-    width: '47%', // Twee kaarten naast elkaar
-    height: 120,  // Hoogte van de rechthoeken
+    width: '48%',
+    height: 160,
     backgroundColor: '#EDEDED',
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 12,
   },
 });

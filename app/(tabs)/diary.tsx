@@ -1,71 +1,137 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import Card from '@/components/Card'; // Zorg ervoor dat je Card component geïmporteerd is
+import React, { useContext } from 'react';
+import { View, StyleSheet, Text, ScrollView, ImageBackground } from 'react-native';
+
+// Voorbeeld: Context om de gebruikerstoestand te beheren
+const AuthContext = React.createContext({ name: 'Sarah' });
+
+// Functie om de dag van het jaar te berekenen
+const getDayOfYear = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - start.getTime() + (start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000;
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+};
+
+// Quotes lijst
+const quotes = [
+  "Believe in yourself!",
+  "Every day is a second chance.",
+  "Happiness is a journey, not a destination.",
+  "Be the change you wish to see in the world.",
+  "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+  "Your limitation—it's only your imagination.",
+  "Push yourself, because no one else is going to do it for you.",
+  "Great things never come from comfort zones.",
+  "Dream it. Wish it. Do it.",
+  "Success doesn’t just find you. You have to go out and get it."
+];
+
+// Voeg je achtergrondafbeelding toe
+const BACKGROUND_IMAGE = require('@/assets/images/background2.png');
 
 export default function DiaryScreen() {
-  // Lijst van de items voor de DiaryScreen
-  const items = [
-    'Moodchart this week', 'Mood counter', 'Quote', 'Moodchart this month'
-  ];
+  const { name } = useContext(AuthContext); // Haal de naam van de gebruiker op via context
+
+  // Bereken de quote van de dag
+  const dayOfYear = getDayOfYear();
+  const quoteOfTheDay = quotes[dayOfYear % quotes.length]; // Gebruik modulo om de index te beperken
 
   return (
-    <View style={styles.container}>
-      <ThemedText type="title" style={styles.title}>Diary</ThemedText>
+    <ImageBackground
+      source={BACKGROUND_IMAGE}
+      style={styles.background}
+      resizeMode="cover" // Zorg dat de afbeelding de container bedekt
+    >
+      <View style={styles.overlay}>
+        {/* Scrollable Content */}
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Titel */}
+          <Text style={styles.title}>Diary of {name}</Text>
 
-      {/* ScrollView voor horizontaal scrollen */}
-      <ScrollView
-        contentContainerStyle={styles.grid}  // Zorgt voor horizontale uitlijning van de kaarten en het in meerdere rijen plaatsen
-        showsHorizontalScrollIndicator={false}  // Verbergt de horizontale scrollbar
-      >
-        {/* Moodchart this week kaart neemt de volledige breedte */}
-        <View style={styles.fullWidthCard}>
-          <Card text="Moodchart this week" />
-        </View>
+          {/* Eerste Rij */}
+          <View style={[styles.card, styles.fullWidthCard]}>
+            <Text style={styles.cardText}>Moodchart this week</Text>
+          </View>
 
-        {/* Mood counter en Quote kaarten worden naast elkaar op de tweede rij */}
-        <View style={styles.row}>
-          <Card text="Mood counter" />
-          <Card text="Quote" />
-        </View>
+          {/* Tweede Rij */}
+          <View style={styles.row}>
+            <View style={[styles.card, styles.halfWidthCard]}>
+              <Text style={styles.cardText}>Mood counter</Text>
+            </View>
+            <View style={[styles.card, styles.halfWidthCard, styles.quoteCard]}>
+              <Text style={styles.quoteText}>{quoteOfTheDay}</Text>
+            </View>
+          </View>
 
-        {/* Moodchart this month kaart komt op de derde rij */}
-        <View style={styles.fullWidthCard}>
-          <Card text="Moodchart this month" />
-        </View>
-      </ScrollView>
-    </View>
+          {/* Derde Rij */}
+          <View style={[styles.card, styles.fullWidthCard]}>
+            <Text style={styles.cardText}>Moodchart this month</Text>
+          </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: '#25292e',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Donkere overlay voor betere leesbaarheid
+  },
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,  // Dit zorgt ervoor dat er geen padding aan de zijkanten is
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   title: {
-    marginBottom: 16,
+    fontSize: 28,
+    color: 'white',
+    fontWeight: 'bold',
+    marginBottom: 24,
     textAlign: 'center',
-    color: '#FFF',  // Zorg ervoor dat de titel wit is
-  },
-  grid: {
-    // Zorg ervoor dat de kaarten niet breder zijn dan het scherm
-    flexDirection: 'row',  // De kaarten moeten horizontaal naast elkaar staan
-    flexWrap: 'wrap',      // Hiermee kunnen de kaarten over meerdere rijen gaan
-    justifyContent: 'space-between',  // Dit zorgt ervoor dat de kaarten mooi verdeeld zijn
-    width: '100%',  // Zorg ervoor dat de container de volledige breedte van het scherm gebruikt
   },
   row: {
-    flexDirection: 'row',  // Dit zorgt ervoor dat de kaarten op dezelfde rij komen
-    justifyContent: 'space-between',  // Zorgt voor ruimte tussen de kaarten
-    width: '100%',  // Zorgt ervoor dat de kaarten binnen de container passen
-    marginBottom: 16,  // Ruimte tussen de rijen
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    width: '100%',
+  },
+  card: {
+    backgroundColor: '#EDEDED',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+    marginBottom: 24,
   },
   fullWidthCard: {
-    width: '100%',  // Zorgt ervoor dat de kaart de volledige breedte van het scherm gebruikt
-    marginBottom: 16,  // Ruimte tussen de rijen
+    width: '100%',
+    height: 120,
+  },
+  halfWidthCard: {
+    width: '48%',
+    height: 120,
+  },
+  cardText: {
+    color: '#8C8C8C',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  quoteCard: {
+    backgroundColor: '#A3BB91', // Groenachtige achtergrondkleur voor de Quote Section
+  },
+  quoteText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontStyle: 'italic',
+    textAlign: 'center',
   },
 });

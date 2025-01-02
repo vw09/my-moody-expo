@@ -1,15 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function ProfileScreen() {
   const router = useRouter(); // Haal de router op
-
-  const handleLogout = () => {
-    // Logica om uit te loggen (bijv. auth tokens verwijderen)
-    console.log('User logged out');
-    router.push('/'); // Navigeer naar de index/inlogpagina
-  };
 
   return (
     <View style={styles.container}>
@@ -22,31 +17,46 @@ export default function ProfileScreen() {
 
       {/* Menuopties */}
       <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuItem}>
+        {/* Home */}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/')} // Direct naar de Home-tab
+        >
           <View style={styles.menuIcon}>
-            <Text style={styles.menuIconText}>🏠</Text>
+            <Ionicons name="home-outline" size={24} color="white" />
           </View>
           <Text style={styles.menuText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        {/* Library */}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/(tabs)/library')} // Direct naar de Library-tab
+        >
           <View style={styles.menuIcon}>
-            <Text style={styles.menuIconText}>📚</Text>
+            <Ionicons name="library-outline" size={24} color="white" />
           </View>
           <Text style={styles.menuText}>Library</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuItem}>
+        {/* Diary */}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/(tabs)/diary')} // Direct naar de Diary-tab
+        >
           <View style={styles.menuIcon}>
-            <Text style={styles.menuIconText}>📖</Text>
+            <Ionicons name="book-outline" size={24} color="white" />
           </View>
-          <Text style={styles.menuText}>Journal</Text>
+          <Text style={styles.menuText}>Diary</Text>
         </TouchableOpacity>
 
         {/* Log out knop */}
-        <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push('/')} // Terug naar de loginpagina
+        >
           <View style={styles.menuIcon}>
-            <Text style={styles.menuIconText}>👤</Text>
+            <Ionicons name="log-out-outline" size={24} color="white" />
           </View>
           <Text style={styles.menuText}>Log out</Text>
         </TouchableOpacity>
@@ -97,10 +107,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 20,
-  },
-  menuIconText: {
-    fontSize: 18,
-    color: 'white',
   },
   menuText: {
     fontSize: 20,
