@@ -1,10 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
   const router = useRouter(); // Haal de router op
+
+  const handleLogout = async () => {
+    try {
+      // Verwijder het token of andere gebruikersgegevens uit AsyncStorage
+      await AsyncStorage.removeItem('token'); // Verwijder het opgeslagen token
+      console.log('User logged out');
+      Alert.alert('Logged Out', 'You have successfully logged out.');
+
+      // Navigeer naar de loginpagina
+      router.replace('/login');
+    } catch (error) {
+      console.error('Logout Error:', error);
+      Alert.alert('Error', 'Failed to log out. Please try again.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -53,7 +69,7 @@ export default function ProfileScreen() {
         {/* Log out knop */}
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => router.push('/')} // Terug naar de loginpagina
+          onPress={handleLogout} // Gebruik de nieuwe logout functie
         >
           <View style={styles.menuIcon}>
             <Ionicons name="log-out-outline" size={24} color="white" />

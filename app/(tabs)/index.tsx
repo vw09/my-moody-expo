@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     flexGrow: 1, // Zorgt ervoor dat de inhoud zich volledig vult
     paddingHorizontal: 4,
     paddingTop: 16,
+    paddingBottom: 140, // Houdt rekening met de hoogte van de navigatie
   },
   title: {
     marginBottom: 16,
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   genreContainer: {
     flexDirection: 'row',
     marginBottom: 4,
-    position: 'fixed',
+    position: 'relative',
   },
   gridContainer: {
     flexDirection: 'row',
