@@ -1,131 +1,150 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
-  const router = useRouter(); // Haal de router op
+  const router = useRouter();
+  const [userData, setUserData] = useState({ name: '', email: '', mood: '' });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const name = await AsyncStorage.getItem('userName');
+        const email = await AsyncStorage.getItem('userEmail');
+        const mood = await AsyncStorage.getItem('userMood');
+
+        setUserData({
+          name: name || 'Unknown',
+          email: email || 'Unknown',
+          mood: mood || 'Neutral',
+        });
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleLogout = async () => {
     try {
-      // Verwijder het token of andere gebruikersgegevens uit AsyncStorage
-      await AsyncStorage.removeItem('token'); // Verwijder het opgeslagen token
-      console.log('User logged out');
-      Alert.alert('Logged Out', 'You have successfully logged out.');
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('userName');
+      await AsyncStorage.removeItem('userEmail');
+      await AsyncStorage.removeItem('userMood');
 
-      // Navigeer naar de loginpagina
+      Alert.alert('Logged Out', 'You have successfully logged out.');
       router.replace('./index');
     } catch (error) {
-      console.error('Logout Error:', error);
       Alert.alert('Error', 'Failed to log out. Please try again.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      {/* Profielafbeelding */}
-      <View style={styles.profileSection}>
-        <View style={styles.profileImage}></View>
-        <Text style={styles.greetingText}>Hi</Text>
-        <Text style={styles.userName}>Sarah</Text>
-      </View>
+    <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+      <View style={styles.container}>
+        {/* Profielsectie */}
+        <View style={styles.profileSection}>
+          <View style={styles.profileImage}></View>
+          <Text style={styles.greetingText}>Hi</Text>
+          <Text style={styles.userName}>{userData.name}</Text>
+        </View>
 
-      {/* Menuopties */}
-      <View style={styles.menu}>
-        {/* Home */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => router.push('/')} // Direct naar de Home-tab
-        >
-          <View style={styles.menuIcon}>
-            <Ionicons name="home-outline" size={24} color="white" />
+        {/* Gebruikersinformatie */}
+        <View style={styles.infoContainer}>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Name</Text>
+            <Text style={styles.infoValue}>{userData.name}</Text>
           </View>
-          <Text style={styles.menuText}>Home</Text>
-        </TouchableOpacity>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Email</Text>
+            <Text style={styles.infoValue}>{userData.email}</Text>
+          </View>
+          <View style={styles.infoItem}>
+            <Text style={styles.infoLabel}>Mood</Text>
+            <Text style={styles.infoValue}>{userData.mood}</Text>
+          </View>
+        </View>
 
-        {/* Library */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => router.push('/(tabs)/library')} // Direct naar de Library-tab
-        >
-          <View style={styles.menuIcon}>
-            <Ionicons name="library-outline" size={24} color="white" />
-          </View>
-          <Text style={styles.menuText}>Library</Text>
-        </TouchableOpacity>
-
-        {/* Diary */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => router.push('/(tabs)/diary')} // Direct naar de Diary-tab
-        >
-          <View style={styles.menuIcon}>
-            <Ionicons name="book-outline" size={24} color="white" />
-          </View>
-          <Text style={styles.menuText}>Diary</Text>
-        </TouchableOpacity>
-
-        {/* Log out knop */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={handleLogout} // Gebruik de nieuwe logout functie
-        >
-          <View style={styles.menuIcon}>
-            <Ionicons name="log-out-outline" size={24} color="white" />
-          </View>
-          <Text style={styles.menuText}>Log out</Text>
+        {/* Log Out Knop */}
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Log out</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#1a1a1a',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   profileSection: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginTop: 80,
+    marginBottom: 50,
   },
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#ccc',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#444',
     marginBottom: 10,
   },
   greetingText: {
-    fontSize: 24,
-    color: 'white',
+    fontSize: 20,
+    color: '#fff',
   },
   userName: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#fff',
   },
-  menu: {
+  infoContainer: {
     marginTop: 20,
   },
-  menuItem: {
+  infoItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 8,
+    marginBottom: 10,
   },
-  menuIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#444',
+  infoLabel: {
+    fontSize: 16,
+    color: '#aaa',
+  },
+  infoValue: {
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  logoutButton: {
+    marginTop: 50,
+    alignSelf: 'center',
+    width: '80%',
+    height: 50,
+    backgroundColor: '#4A6A47',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 20,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
   },
-  menuText: {
-    fontSize: 20,
-    color: 'white',
+  logoutButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFF',
   },
 });

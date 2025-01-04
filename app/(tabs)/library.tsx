@@ -1,76 +1,71 @@
 import React from 'react';
-import { ImageBackground, View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native';
-
-const BACKGROUND_IMAGE = require('@/assets/images/background2.png'); // Voeg je afbeelding hier in
+import { View, StyleSheet, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Zorg dat expo-linear-gradient is geïnstalleerd
 
 export default function LibraryScreen() {
-  const categories = ['Playlists', 'Podcasts', 'Artisten', 'Albums'];
+  const categories = ['Playlists', 'Podcasts', 'Artists', 'Albums'];
   const recentItems = ['Recent 1', 'Recent 2', 'Recent 3', 'Recent 4'];
   const likedItems = ['Liked 1', 'Liked 2', 'Liked 3', 'Liked 4'];
   const recommendedItems = ['Recommended 1', 'Recommended 2', 'Recommended 3', 'Recommended 4'];
 
   return (
-    <ImageBackground
-      source={BACKGROUND_IMAGE}
-      style={styles.background}
-      resizeMode="cover" // Zorg dat de afbeelding de container bedekt
-    >
-      <View style={styles.overlay}>
+    <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Titel */}
+        <Text style={styles.title}>Library</Text>
+
+        {/* Categorieën */}
         <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.contentContainer}
-          showsVerticalScrollIndicator={false}
+          horizontal
+          contentContainerStyle={styles.categoriesContainer}
+          showsHorizontalScrollIndicator={false}
         >
-          {/* Titel */}
-          <Text style={styles.title}>Library</Text>
-
-          {/* Categorieën */}
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.categoriesContainer}
-            showsHorizontalScrollIndicator={false}
-          >
-            {categories.map((category, index) => (
-              <TouchableOpacity key={index} style={styles.categoryButton}>
-                <Text style={styles.categoryText}>{category}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-
-          {/* Secties */}
-          <Text style={styles.sectionTitle}>Recent</Text>
-          <View style={styles.grid}>
-            {recentItems.map((item, index) => (
-              <View key={index} style={styles.card} />
-            ))}
-          </View>
-
-          <Text style={styles.sectionTitle}>Liked</Text>
-          <View style={styles.grid}>
-            {likedItems.map((item, index) => (
-              <View key={index} style={styles.card} />
-            ))}
-          </View>
-
-          <Text style={styles.sectionTitle}>Recommended</Text>
-          <View style={styles.grid}>
-            {recommendedItems.map((item, index) => (
-              <View key={index} style={styles.card} />
-            ))}
-          </View>
+          {categories.map((category, index) => (
+            <TouchableOpacity key={index} style={styles.categoryButton}>
+              <Text style={styles.categoryText}>{category}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
-      </View>
-    </ImageBackground>
+
+        {/* Secties */}
+        <Text style={styles.sectionTitle}>Recent</Text>
+        <View style={styles.grid}>
+          {recentItems.map((item, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.cardText}>{item}</Text>
+            </View>
+          ))}
+        </View>
+
+        <Text style={styles.sectionTitle}>Liked</Text>
+        <View style={styles.grid}>
+          {likedItems.map((item, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.cardText}>{item}</Text>
+            </View>
+          ))}
+        </View>
+
+        <Text style={styles.sectionTitle}>Recommended</Text>
+        <View style={styles.grid}>
+          {recommendedItems.map((item, index) => (
+            <View key={index} style={styles.card}>
+              <Text style={styles.cardText}>{item}</Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Donkere overlay voor betere leesbaarheid
   },
   scrollView: {
     flex: 1,
@@ -118,5 +113,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#444',
     borderRadius: 10,
     marginBottom: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardText: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
