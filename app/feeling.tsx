@@ -1,76 +1,62 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ImageBackground, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ImageBackground } from 'react-native';
 import { useRouter } from 'expo-router';
-import { API_URL } from '@/constants/Api';
 
 // Achtergrondafbeelding
 const BACKGROUND_IMAGE = require('../assets/images/background2.png');
 
-const emojiData = [
-  { name: 'Happy', image: require('../assets/images/happy.png') },
-  { name: 'Sad', image: require('../assets/images/sad.png') },
-  { name: 'Angry', image: require('../assets/images/angry.png') },
-  { name: 'Spectaculair', image: require('../assets/images/spectaculair.png') },
-  { name: 'Good', image: require('../assets/images/good.png') },
-  { name: 'Upset', image: require('../assets/images/upset.png') }
-];
-
-// Functie voor het opslaan van de stemming
-const saveMood = async (mood: string) => {
-  try {
-    const response = await fetch(`${API_URL}/moods`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user: '637f72c58c5aab5f8f68f0c9',  // Dit moet de juiste ObjectId van de ingelogde gebruiker zijn
-        mood: mood.toLowerCase(),  // Zorg ervoor dat de mood in kleine letters is
-        description: `Feeling ${mood}`,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      console.error('Error Response:', errorResponse);
-      throw new Error('Failed to save mood');
-    }
-
-    const data = await response.json();
-    console.log('Mood saved:', data);
-    return data;
-  } catch (error) {
-    console.error('Save Mood Error:', error);
-    return null;
-  }
-};
+// Emoji afbeeldingen
+const Good = require('../assets/images/good.png');
+const Happy = require('../assets/images/happy.png');
+const Sad = require('../assets/images/sad.png');
+const Angry = require('../assets/images/angry.png');
+const Spectacular = require('../assets/images/spectaculair.png');
+const Upset = require('../assets/images/upset.png');
 
 export default function FeelingPage() {
   const router = useRouter();
 
-  const handleMoodSelection = async (mood: string) => {
-    console.log(`Selected mood: ${mood}`);  // Log de geselecteerde mood
-    const savedMood = await saveMood(mood); // Opslaan van stemming in de database
-  
-    if (savedMood) {
-      router.replace('/(tabs)'); // Navigeren naar tabs als de mood succesvol is opgeslagen
-    }
+  const handleContinue = () => {
+    router.replace('/(tabs)'); // Navigeren naar tabs
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Achtergrondafbeelding als parent-container */}
       <ImageBackground source={BACKGROUND_IMAGE} style={styles.background}>
-        <Text style={styles.title}>How do you feel today?</Text>
-        <View style={styles.emojiContainer}>
-          {emojiData.map((emoji, index) => (
-            <TouchableOpacity key={index} style={styles.emojiWrap} onPress={() => handleMoodSelection(emoji.name)}>
-              <Image source={emoji.image} style={styles.emoji} />
-            </TouchableOpacity>
-          ))}
+        <View style={styles.container}>
+          {/* Titel */}
+          <Text style={styles.title}>How do you feel today?</Text>
+
+          <View style={styles.emojiContainer}>
+  {/* Eerste Rij */}
+  <View style={styles.row}>
+    <Image source={Happy} style={styles.emoji} />
+  </View>
+
+  {/* Tweede Rij (2 emoji's) */}
+  <View style={styles.row}>
+    <Image source={Sad} style={styles.emoji} />
+    <Image source={Spectacular} style={styles.emoji} />
+  </View>
+
+  {/* Derde Rij (2 emoji's) */}
+  <View style={styles.row}>
+    <Image source={Good} style={styles.emoji} />
+    <Image source={Angry} style={styles.emoji} />
+  </View>
+
+  {/* Vierde Rij */}
+  <View style={styles.row}>
+    <Image source={Upset} style={styles.emoji} />
+  </View>
+</View>
+
+          {/* Continue Knop */}
+          <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+            <Text style={styles.continueText}>continue</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.continueButton} onPress={() => router.replace('/(tabs)')}>
-          <Text style={styles.continueText}>Continue</Text>
-        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -81,44 +67,76 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
+    flex: 1, // Zorgt ervoor dat de achtergrond de volledige ruimte gebruikt
+    resizeMode: 'cover', // Bedekt het volledige scherm zonder vervorming
+    position: 'absolute', // Plaatst de afbeelding achter alle content
+    width: '100%', // Volledige breedte
+    height: '100%', // Volledige hoogte
+  },
+  container: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 50,
+    paddingTop: 40,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 36, // Grotere titel
+    color: '#FFF',
     fontWeight: 'bold',
-    color: '#fff',
+    textAlign: 'center',
     marginBottom: 20,
   },
   emojiContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
   },
-  emojiWrap: {
-    margin: 10,
-    width: 70,
-    height: 70,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 10, // Ruimte tussen de rijen
+  },
+  rowOffset1: {
+    alignSelf: 'flex-start', // Verschuif de rij naar links
+    marginLeft: 30, // Extra ruimte vanaf de linkerkant
+  },
+  rowOffset2: {
+    alignSelf: 'flex-end', // Verschuif de rij naar rechts
+    marginRight: 30, // Extra ruimte vanaf de rechterkant
   },
   emoji: {
-    width: '100%',
-    height: '100%',
+    width: 100,
+    height: 100,
+    marginHorizontal: 10, // Ruimte tussen emoji's in dezelfde rij
   },
+    emojiTop: {
+      width: 110,
+      height: 110,
+      marginBottom: 10,
+    },
+    emojiBottom: {
+      width: 110,
+      height: 110,
+      marginTop: 10,
+    },
   continueButton: {
-    backgroundColor: '#000',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    marginTop: 20,
+    backgroundColor: '#3C3C3C',
+    paddingVertical: 12,
+    paddingHorizontal: 50,
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+    marginTop: 20, // Ruimte boven de knop
   },
   continueText: {
-    fontSize: 20,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: '600',
+    textTransform: 'capitalize',
   },
 });
