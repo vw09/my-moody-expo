@@ -15,7 +15,7 @@ export default function ProfileScreen() {
       Alert.alert('Logged Out', 'You have successfully logged out.');
 
       // Navigeer naar de loginpagina
-      router.replace('/login');
+      router.replace('./index');
     } catch (error) {
       console.error('Logout Error:', error);
       Alert.alert('Error', 'Failed to log out. Please try again.');
