@@ -1,25 +1,28 @@
 import { View, Alert, SafeAreaView, TouchableOpacity, Image, StyleSheet, Platform, TextInput, Text } from 'react-native';
+import useMessages from '@/data/message'; // Commented out because the module does not exist
 import { useEffect } from 'react';
-import { API_URL } from '@/constants/Api';
+import {API_URL} from '@/constants/Api'
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
-export default function LoginScreen() {
+
+ export default function LoginScreen() {
   const router = useRouter();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const checkLogin = async () => {
       const userId = await AsyncStorage.getItem('userId');
       if (userId) {
         router.replace('/feeling');
       }
-    };
+    }
     checkLogin();
-  }, []);
+  }
+  , []);*/
 
-  const handleGoogleLogin = async () => {
+   const handleGoogleLogin = async () => {
     try {
       const authUrl = `${API_URL}/auth/google`;
       const redirectUrl = AuthSession.makeRedirectUri();
@@ -32,19 +35,20 @@ export default function LoginScreen() {
         const params = new URL(result.url).searchParams;
 
         const user = params.get('user');
-        console.log(user);
         if (user) {
           await AsyncStorage.setItem('userId', user);
           router.replace('/feeling');
         }
-      } else {
-        Alert.alert('Authentication canceled or failed');
+      }else {
+        Alert.alert('authentication canceled or failed');
       }
-    } catch (error) {
+
+    }catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Failed to authenticate with Google');
+      Alert.alert('Error', 'failed to authenticate with Google');
     }
-  };
+  }
+
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -77,6 +81,8 @@ export default function LoginScreen() {
 
         {/* Google login */}
         <View style={styles.googleContainer}>
+
+          {/* Login with Google button */}
           <TouchableOpacity style={styles.googleTextButton} onPress={handleGoogleLogin}>
             <Text style={styles.googleTextButtonText}>Login with Google</Text>
           </TouchableOpacity>
@@ -162,14 +168,10 @@ const styles = StyleSheet.create({
   googleTextButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#4A6A47', // Donkerdere groen voor betere zichtbaarheid
+    backgroundColor: '#204D37',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 3,
   },
   googleTextButtonText: {
     fontSize: 16,

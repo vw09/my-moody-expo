@@ -1,78 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import useUserGet from '@/data/user-get';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function ProfileScreen() {
-  const router = useRouter();
-  const [userData, setUserData] = useState({ name: '', email: '', mood: '' });
+  const params = useLocalSearchParams();
+  const { data, isLoading } = useUserGet(params.userId);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const name = await AsyncStorage.getItem('userName');
-        const email = await AsyncStorage.getItem('userEmail');
-        const mood = await AsyncStorage.getItem('userMood');
-
-        setUserData({
-          name: name || 'Unknown',
-          email: email || 'Unknown',
-          mood: mood || 'Neutral',
-        });
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('userName');
-      await AsyncStorage.removeItem('userEmail');
-      await AsyncStorage.removeItem('userMood');
-
-      Alert.alert('Logged Out', 'You have successfully logged out.');
-      router.replace('./index');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to log out. Please try again.');
-    }
-  };
+  if (isLoading || !data) {
+    return (
+      <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.container}>
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+    );
+  }
 
   return (
     <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
-      <View style={styles.container}>
-        {/* Profielsectie */}
-        <View style={styles.profileSection}>
-          <View style={styles.profileImage}></View>
-          <Text style={styles.greetingText}>Hi</Text>
-          <Text style={styles.userName}>{userData.name}</Text>
-        </View>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          {/* Header Sectie */}
+          <View style={styles.header}>
+            <Image
+              source={{
+                uri: data.image || 'https://via.placeholder.com',
+              }}
+              style={styles.profileImage}
+            />
+            <Text style={styles.userName}>{data.username || 'Unknown User'}</Text>
+            <Text style={styles.userEmail}>{data.email || 'No email provided'}</Text>
+          </View>
 
-        {/* Gebruikersinformatie */}
-        <View style={styles.infoContainer}>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Name</Text>
-            <Text style={styles.infoValue}>{userData.name}</Text>
+          {/* Informatiekaarten */}
+          <View style={styles.infoCard}>
+            <Text style={styles.cardTitle}>Mood Tracker</Text>
+            <Text style={styles.cardContent}>
+              Current Mood: <Text style={styles.highlight}>{data.mood || 'Not set'}</Text>
+            </Text>
           </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Email</Text>
-            <Text style={styles.infoValue}>{userData.email}</Text>
-          </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>Mood</Text>
-            <Text style={styles.infoValue}>{userData.mood}</Text>
-          </View>
-        </View>
 
-        {/* Log Out Knop */}
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Log out</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.infoCard}>
+            <Text style={styles.cardTitle}>Joined On</Text>
+            <Text style={styles.cardContent}>
+              {new Date(data.createdAt).toLocaleDateString() || 'Date not available'}
+            </Text>
+          </View>
+
+          {/* Actieknoppen */}
+          <TouchableOpacity style={styles.actionButtonTransparent}>
+            <Text style={styles.actionButtonTransparentText}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButtonFilled}>
+            <Text style={styles.actionButtonFilledText}>Log Out</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
     </LinearGradient>
   );
 }
@@ -81,70 +68,107 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
   },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 50,
+    paddingTop: 30,
+  },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-  },
-  profileSection: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 80,
-    marginBottom: 50,
+  },
+  loadingText: {
+    fontSize: 18,
+    color: '#FFF',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 30,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#444',
-    marginBottom: 10,
-  },
-  greetingText: {
-    fontSize: 20,
-    color: '#fff',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 15,
+    borderWidth: 3,
+    borderColor: '#6BAF92',
   },
   userName: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  infoContainer: {
-    marginTop: 20,
-  },
-  infoItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: '#1A1A1A',
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  infoLabel: {
-    fontSize: 16,
-    color: '#aaa',
-  },
-  infoValue: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  logoutButton: {
-    marginTop: 50,
-    alignSelf: 'center',
-    width: '80%',
-    height: 50,
-    backgroundColor: '#4A6A47',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.4,
-    shadowRadius: 3,
-  },
-  logoutButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
     color: '#FFF',
+    fontWeight: 'bold',
+  },
+  userEmail: {
+    fontSize: 16,
+    color: '#BBB',
+    marginTop: 5,
+  },
+  infoCard: {
+    backgroundColor: '#3C3C3C',
+    width: '90%',
+    borderRadius: 10,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  cardTitle: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardContent: {
+    fontSize: 16,
+    color: '#FFF',
+  },
+  highlight: {
+    fontWeight: 'bold',
+    color: '#6BAF92',
+  },
+  actionButtonTransparent: {
+    borderColor: '#6BAF92',
+    borderWidth: 2,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+    marginBottom: 15,
+  },
+  actionButtonTransparentText: {
+    color: '#6BAF92',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  actionButtonFilled: {
+    backgroundColor: '#204D37',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  actionButtonFilledText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

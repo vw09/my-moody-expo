@@ -54,7 +54,6 @@ export default function DiaryScreen() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.card, styles.halfWidthCard, styles.quoteCard]}>
-            <Text style={styles.cardTitle}>Quote of the Day</Text>
             <Text style={styles.quoteText}>{quoteOfTheDay}</Text>
           </TouchableOpacity>
         </View>
@@ -83,12 +82,12 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   title: {
-    fontSize: 28,
-    color: '#fff',
-    fontWeight: 'bold',
-    marginTop: 50, // Extra ruimte boven de titel
-    marginBottom: 30, // Extra ruimte onder de titel
+    fontSize: 48,
+    color: '#FFF',
+    marginBottom: 15,
+    marginTop: 50, // Verplaatst de titel verder naar beneden
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   row: {
     flexDirection: 'row',
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#A3C4A1', // Groen voor kaarttitels
+    color: '#207D37', // Groen voor kaarttitels
     marginBottom: 10,
   },
   placeholder: {
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   quoteCard: {
-    backgroundColor: '#7E956C', // Groenachtige tint zoals de login-knop
+    backgroundColor: '#204D37', // Groenachtige tint zoals de login-knop
     borderWidth: 1,
     borderColor: '#5A7345',
     padding: 10,

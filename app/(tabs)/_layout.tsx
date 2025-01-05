@@ -1,13 +1,36 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 export default function TabLayout() {
+
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const user = await AsyncStorage.getItem('userId');
+      if (user) {
+        const parsedUser = JSON.parse(user);
+        const userId = parsedUser.id;
+        setUserId(userId);
+      }
+    }
+    getUserId()  
+  }, []);
+
+  if (!userId) {
+    return null;
+  }
+
+
+
   return (
 <Tabs
   screenOptions={{
-    tabBarActiveTintColor: '#A3BB91',
+    tabBarActiveTintColor: '#204D37',
     tabBarStyle: {
       backgroundColor: '#25292e',
       position: 'absolute',
@@ -37,19 +60,21 @@ export default function TabLayout() {
     ),
   }}
 />
-      <Tabs.Screen
-        name="library"
-        options={{
-          headerShown: false,
-          title: 'Library',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'library-sharp' : 'library-outline'} color={color} size={24}/>
-          ),
-        }}
-      />
+
+<Tabs.Screen
+  name="musicplayer"
+  options={{
+    headerShown: false,
+    title: 'Music Player',
+    tabBarIcon: ({ color, focused }) => (
+      <Ionicons name={focused ? 'musical-notes' : 'musical-notes-outline'} color={color} size={24} />
+    ),
+  }}
+/>
 
 <Tabs.Screen
         name="diary"
+        initialParams={{ userId }}
         options={{
           headerShown: false,
           title: 'Diary',
@@ -61,6 +86,7 @@ export default function TabLayout() {
 
 <Tabs.Screen
         name="profile"
+        initialParams={{ userId }}
         options={{
           headerShown: false,
           title: 'Profile',

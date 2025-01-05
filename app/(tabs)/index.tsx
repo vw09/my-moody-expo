@@ -1,89 +1,145 @@
-import { View, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
-import Card from '@/components/Card';
-import { ThemedText } from '@/components/ThemedText';
-import SharedBackground from '@/components/SharedBackground';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, View, StyleSheet, Text, FlatList, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { API_URL } from '@/constants/Api';
 
+export default function HomeScreen() {
+  const [playlists, setPlaylists] = useState([]); // Opslag voor alle playlists
+  const [isLoading, setIsLoading] = useState(true); // Laadstatus
 
-  const genres = [
-    'Pop', 'Rock', 'Metal', 'Electronic', 'Hip Hop', 'Rap', 'R&B',
-    'Soul', 'Funk', 'Jazz', 'Blues', 'Country', 'Reggae',
-    'Klassiek', 'Latin', 'Gospel', 'Folk', 'World Music', 'Opera'
-  ];
+  // Haal alle playlists op
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const response = await fetch(`${API_URL}/playlists`);
+        const data = await response.json();
+        console.log('Fetched playlists:', data); // Controleer de opgehaalde data
+        setPlaylists(data); // Sla alle playlists op
+      } catch (error) {
+        console.error('Error fetching playlists:', error);
+      } finally {
+        setIsLoading(false); // Zet de laadstatus uit
+      }
+    };
 
-  export default function Index() {
+    fetchPlaylists();
+  }, []);
+
+  // Laadstatus
+  if (isLoading) {
+    return (
+      <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+        <View style={styles.container}>
+          <Text style={styles.loadingText}>Loading playlists...</Text>
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  // Render een playlist-item
+  interface Song {
+    _id: string;
+    title: string;
+    artist: string;
+  }
+
+  interface Playlist {
+    _id: string;
+    name: string;
+    songIds: Song[];
+  }
+
+  const renderPlaylist = ({ item }: { item: Playlist }) => (
+    <TouchableOpacity style={styles.playlistCard}>
+      <Text style={styles.playlistTitle}>{item.name}</Text>
+      <Text style={styles.songCount}>{item.songIds.length} songs</Text>
+      {item.songIds.slice(0, 2).map((song: Song) => ( // Toon maximaal 2 songs
+        <Text key={song._id} style={styles.song}>
+          {song.title} - {song.artist}
+        </Text>
+      ))}
+    </TouchableOpacity>
+  );
+
   return (
-    <SharedBackground>
+    <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          {/* Inhoud */}
-          <ScrollView
-            contentContainerStyle={styles.contentContainer}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Titel */}
-            <ThemedText type="title" style={styles.title}>Your choice</ThemedText>
+          <Text style={styles.title}>All Playlists</Text>
 
-            {/* Genres */}
-            <ScrollView
-              contentContainerStyle={styles.genreContainer}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            >
-              {genres.map((genre, index) => (
-                <Card key={index} text={genre} />
-              ))}
-            </ScrollView>
-
-            {/* Grid met inhoud */}
-            <View style={styles.gridContainer}>
-              {[...Array(20)].map((_, index) => (
-                <View key={index} style={styles.cardPlaceholder} />
-              ))}
-            </View>
-          </ScrollView>
+          <FlatList
+            data={playlists}
+            keyExtractor={(item) => item._id.toString()} // Gebruik de unieke playlist-ID
+            renderItem={renderPlaylist}
+            contentContainerStyle={styles.playlistList}
+            numColumns={2} // Zorg voor 2 kaarten per rij
+          />
         </View>
       </SafeAreaView>
-    </SharedBackground>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
   },
   container: {
-    flex: 2,
-    flexDirection: 'column', // Flexibele verticale layout
-  },
-  contentContainer: {
-    flexGrow: 1, // Zorgt ervoor dat de inhoud zich volledig vult
-    paddingHorizontal: 4,
-    paddingTop: 16,
-    paddingBottom: 140, // Houdt rekening met de hoogte van de navigatie
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   title: {
-    marginBottom: 16,
-    textAlign: 'center',
+    fontSize: 48,
     color: '#FFF',
-    fontSize: 28,
+    marginBottom: 20,
+    marginTop: 50,
+    textAlign: 'center',
     fontWeight: 'bold',
   },
-  genreContainer: {
-    flexDirection: 'row',
-    marginBottom: 4,
-    position: 'relative',
+  loadingText: {
+    fontSize: 18,
+    color: '#FFF',
   },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    paddingHorizontal: 4,
+  playlistList: {
+    flexGrow: 1,
+    paddingHorizontal: 10,
   },
-  cardPlaceholder: {
-    width: '48%',
-    height: 160,
-    backgroundColor: '#EDEDED',
-    borderRadius: 12,
-    marginBottom: 12,
+  playlistCard: {
+    backgroundColor: '#292929', // Donkere kleur voor een moderne uitstraling
+    padding: 20, // Iets meer padding voor ruimte in de kaart
+    margin: 10,
+    borderRadius: 15, // Rondere hoeken voor een zachtere look
+    width: '45%', // Twee kaarten per rij
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // Schaduw voor een zwevend effect
+  },
+  playlistTitle: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  songCount: {
+    fontSize: 14,
+    color: '#6BAF92', // Accentkleur voor het aantal songs
+    marginBottom: 10,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  song: {
+    fontSize: 12,
+    color: '#BBB',
+    textAlign: 'center',
+    marginBottom: 5,
   },
 });
