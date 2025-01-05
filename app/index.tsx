@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
  export default function LoginScreen() {
   const router = useRouter();
 
-  /*useEffect(() => {
+  useEffect(() => {
     const checkLogin = async () => {
       const userId = await AsyncStorage.getItem('userId');
       if (userId) {
@@ -20,7 +20,7 @@ import { useRouter } from 'expo-router';
     }
     checkLogin();
   }
-  , []);*/
+  , []);
 
    const handleGoogleLogin = async () => {
     try {

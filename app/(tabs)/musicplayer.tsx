@@ -1,52 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import useRandomSong from '@/data/song-get'; // Importeer de hook
 
 export default function MusicPlayerScreen() {
+  const { song, isLoading, isError } = useRandomSong();
+
+  if (isLoading) {
+    return (
+      <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#6BAF92" />
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  if (isError || !song) {
+    return (
+      <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
+        <View style={styles.container}>
+          <Text style={{ color: 'white' }}>Failed to load song. Please try again.</Text>
+        </View>
+      </LinearGradient>
+    );
+  }
+
   return (
     <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
       <View style={styles.container}>
-        {/* Albumafbeelding */}
         <View style={styles.albumArtContainer}>
           <Image
             source={{
-              uri: 'https://via.placeholder.com', // Vervang dit door de echte albumafbeelding
+              uri: song?.albumArt || 'https://via.placeholder.com/250',
             }}
             style={styles.albumArt}
           />
         </View>
 
-        {/* Titel en artiest */}
         <View style={styles.songInfo}>
-          <Text style={styles.songTitle}>Song Title</Text>
-          <Text style={styles.singerName}>Artist Name</Text>
-        </View>
-
-        {/* Visualizer */}
-        <View style={styles.visualizer}>
-          {[...Array(10)].map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.visualizerBar,
-                { height: Math.random() * 50 + 20 }, // Random hoogte
-              ]}
-            />
-          ))}
-        </View>
-
-        {/* Bedieningselementen */}
-        <View style={styles.controls}>
-          <TouchableOpacity style={styles.controlButton}>
-            <Ionicons name="play-skip-back" size={30} color="#FFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.playButton}>
-            <Ionicons name="play" size={40} color="#FFF" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlButton}>
-            <Ionicons name="play-skip-forward" size={30} color="#FFF" />
-          </TouchableOpacity>
+          <Text style={styles.songTitle}>{song?.title || 'Unknown Song'}</Text>
+          <Text style={styles.singerName}>{song?.artist || 'Unknown Artist'}</Text>
+          <Text style={styles.albumName}>{song?.album || 'Unknown Album'}</Text>
         </View>
       </View>
     </LinearGradient>
@@ -60,7 +55,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 20,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   albumArtContainer: {
     alignItems: 'center',
@@ -88,39 +83,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 5,
   },
-  visualizer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 30,
-  },
-  visualizerBar: {
-    width: 10,
-    backgroundColor: '#6BAF92',
-    marginHorizontal: 5,
-    borderRadius: 5,
-  },
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 50,
-  },
-  controlButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: '#292929',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  playButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#6BAF92',
-    justifyContent: 'center',
-    alignItems: 'center',
+  albumName: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });

@@ -1,13 +1,13 @@
-import fetcher from './_fetcher'
-import useSWR from 'swr'
-import { API_URL } from '../constants/Api'
+import fetcher from './_fetcher'; // Zorg ervoor dat je fetcher correct is geïmplementeerd
+import useSWR from 'swr';
+import { API_URL } from '../constants/Api';
 
-export default function useSongsGet (id) {
-  const { data, error, isLoading } = useSWR(`${API_URL}/songs/${id}`, fetcher)
- 
+export default function useRandomSong() {
+  const { data, error, isLoading } = useSWR(`${API_URL}/songs/random`, fetcher);
+
   return {
-    data,
+    song: data,
     isLoading,
-    isError: error
-  }
+    isError: error,
+  };
 }
