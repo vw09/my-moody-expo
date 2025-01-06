@@ -1,11 +1,7 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // Zorg dat expo-linear-gradient is geïnstalleerd
-import { useLocalSearchParams } from 'expo-router';
 import { useRouter } from 'expo-router';
-import useUserGet from '@/data/user-get';
-import useUserPut from '@/data/user-put';
 
 // Emoji afbeeldingen
 const Good = require('../assets/images/good.png');
@@ -18,14 +14,10 @@ const Upset = require('../assets/images/upset.png');
 export default function FeelingPage() {
   const router = useRouter();
 
-  const handleContinue = () => {
-    router.replace('/(tabs)'); // Navigeren naar tabs
+  // Functie om te navigeren naar de tabs
+  const handleEmojiClick = () => {
+    router.replace('/(tabs)'); // Navigeren naar de indexpagina in tabs
   };
-
-  const params = useLocalSearchParams();
-  const { data, isLoading, isError } = useUserGet(params.userId);
-  const { trigger, isMutating } = useUserPut(params.userId);
-  const [username, setUsername] = useState('');
 
   return (
     <LinearGradient colors={['#1A1F1A', '#000']} style={styles.background}>
@@ -38,29 +30,41 @@ export default function FeelingPage() {
           <View style={styles.emojiContainer}>
             {/* Eerste Rij */}
             <View style={styles.row}>
-              <Image source={Happy} style={styles.emoji} />
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Happy} style={styles.emoji} />
+              </TouchableOpacity>
             </View>
 
             {/* Tweede Rij (2 emoji's) */}
             <View style={styles.row}>
-              <Image source={Sad} style={styles.emoji} />
-              <Image source={Spectacular} style={styles.emoji} />
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Sad} style={styles.emoji} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Spectacular} style={styles.emoji} />
+              </TouchableOpacity>
             </View>
 
             {/* Derde Rij (2 emoji's) */}
             <View style={styles.row}>
-              <Image source={Good} style={styles.emoji} />
-              <Image source={Angry} style={styles.emoji} />
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Good} style={styles.emoji} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Angry} style={styles.emoji} />
+              </TouchableOpacity>
             </View>
 
             {/* Vierde Rij */}
             <View style={styles.row}>
-              <Image source={Upset} style={styles.emoji} />
+              <TouchableOpacity onPress={handleEmojiClick}>
+                <Image source={Upset} style={styles.emoji} />
+              </TouchableOpacity>
             </View>
           </View>
 
           {/* Continue Knop */}
-          <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+          <TouchableOpacity style={styles.continueButton} onPress={handleEmojiClick}>
             <Text style={styles.continueText}>Continue</Text>
           </TouchableOpacity>
         </View>
@@ -68,10 +72,6 @@ export default function FeelingPage() {
     </LinearGradient>
   );
 }
-
-FeelingPage.options = {
-  headerShown: false, // Verberg de standaard header
-};
 
 const styles = StyleSheet.create({
   background: {
