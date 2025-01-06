@@ -52,9 +52,6 @@ export default function ProfileScreen() {
           </View>
 
           {/* Actieknoppen */}
-          <TouchableOpacity style={styles.actionButtonTransparent}>
-            <Text style={styles.actionButtonTransparentText}>Edit Profile</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.actionButtonFilled}>
             <Text style={styles.actionButtonFilledText}>Log Out</Text>
           </TouchableOpacity>
