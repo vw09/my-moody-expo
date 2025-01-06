@@ -12,7 +12,6 @@ export default function ProfileScreen() {
   const { data, isLoading } = useUserGet(params.userId || 'defaultUserId');
   const { song, isLoading: isSongLoading } = useRandomSong();
   const { trigger: updateUser, isMutating } = useUserPut(params.userId || 'defaultUserId');
-  const { trigger: updateSong } = useSongPut(song._id);
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState('');
@@ -331,3 +330,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+function updateSong(arg0: { id: any; title: string; artist: string; }) {
+  throw new Error('Function not implemented.');
+}

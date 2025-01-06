@@ -21,32 +21,35 @@ import { useRouter } from 'expo-router';
   }
   , []);
 
-   const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async () => {
     try {
-      const authUrl = `${API_URL}/auth/google`;
-      const redirectUrl = AuthSession.makeRedirectUri();
+        const authUrl = `${API_URL}/auth/google`;
+        const redirectUrl = AuthSession.makeRedirectUri();
 
-      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
+        const result =  await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
 
-      console.log(result);
+        if (result.type === 'success' && result.url) {
+            // Handle the redirect URL
+            const params = new URL(result.url).searchParams;
 
-      if (result.type === 'success') {
-        const params = new URL(result.url).searchParams;
+            // Extract user ID or other parameters (e.g., tokens, profile data)
+            const user = params.get('user'); // Replace with the correct parameter from your server's redirect URL
+            if (user) {
+                // Store the user ID
+                await AsyncStorage.setItem('userId', user);
 
-        const user = params.get('user');
-        if (user) {
-          await AsyncStorage.setItem('userId', user);
-          router.replace('/feeling');
+                // Navigate to tabs after successful login
+                router.replace('/feeling');
+            }
+        } else {
+            Alert.alert('Authentication canceled or failed');
         }
-      }else {
-        Alert.alert('authentication canceled or failed');
-      }
 
-    }catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'failed to authenticate with Google');
+    } catch (error) {
+        console.log(error);
+        Alert.alert('Error', 'Failed to authenticate with Google');
     }
-  }
+}
 
 
   return (
