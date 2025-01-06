@@ -8,20 +8,28 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: '#204D37',
         tabBarStyle: {
-          backgroundColor: '#25292e',
+          backgroundColor: '#25292e', // Background color of the navigation bar
           position: 'absolute',
-          bottom: 28,
+          bottom: 32,
           marginHorizontal: 20,
           borderRadius: 30,
-          height: 50,
+          height: 48, // Increase height to center icons vertically
+          elevation: 0, // Remove shadow on Android
+          borderWidth: 0, // Remove any border
+          borderTopWidth: 0, // Remove top border specifically
         },
+        tabBarItemStyle: {
+          alignItems: 'center', // Center icons horizontally
+          justifyContent: 'center', // Center icons vertically
+        },
+        tabBarShowLabel: false, // No text under the icons
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="home" color={color} size={28} /> // Icon size
           ),
           headerShown: false,
         }}
@@ -29,29 +37,26 @@ export default function TabLayout() {
       <Tabs.Screen
         name="musicplayer"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="musical-notes" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="musical-notes" color={color} size={28} />
           ),
           headerShown: false,
         }}
       />
-
-<Tabs.Screen
+      <Tabs.Screen
         name="diary"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="book" color={color} size={28} />
           ),
           headerShown: false,
         }}
       />
-
-
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person" color={color} size={28} />
           ),
           headerShown: false,
         }}

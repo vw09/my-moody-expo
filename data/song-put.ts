@@ -2,7 +2,7 @@ import mutation from './_mutation';
 import useSWRMutation from 'swr/mutation'
 import { API_URL } from '@/constants/Api'
 
-export default function useUserPut (id: any) {
+export default function useSongPut (id: any) {
   const { trigger, data, error, isMutating } = useSWRMutation(`${API_URL}/songs/${id}`, (url, { arg }: { arg: any }) => {
     return mutation(url, {
       method: 'PUT',
