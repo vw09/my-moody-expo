@@ -1,5 +1,4 @@
 import { View, Alert, SafeAreaView, TouchableOpacity, Image, StyleSheet, Platform, TextInput, Text } from 'react-native';
-import useMessages from '@/data/message'; // Commented out because the module does not exist
 import { useEffect } from 'react';
 import {API_URL} from '@/constants/Api'
 import * as WebBrowser from 'expo-web-browser';
